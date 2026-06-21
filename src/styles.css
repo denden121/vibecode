@@ -102,9 +102,21 @@ body {
 }
 
 .household {
+  margin-bottom: 20px;
+}
+
+.household-title {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.household-stats {
   display: flex;
   gap: 16px;
-  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
@@ -156,12 +168,25 @@ body {
   font-size: 26px;
 }
 
+.income-fields {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
 .salary-field {
   display: flex;
   flex-direction: column;
   gap: 6px;
   font-size: 13px;
   color: var(--muted);
+}
+
+.income-note {
+  margin: -4px 2px 2px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
 }
 
 .salary-input,

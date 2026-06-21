@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { BudgetData } from "./types";
 import { defaultBudget } from "./data";
 
-const STORAGE_KEY = "family-budget:v1";
+const STORAGE_KEY = "family-budget:v2";
 
 function load(): BudgetData {
   try {

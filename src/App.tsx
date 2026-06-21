@@ -1,7 +1,7 @@
 import type { Member } from "./types";
 import { useBudget } from "./useBudget";
 import { MemberSection } from "./components/MemberSection";
-import { freeMoney, totalExpenses, bufferAmount } from "./budget";
+import { freeMoney, totalExpenses, bufferAmount, monthlyIncome } from "./budget";
 import { formatMoney } from "./format";
 
 export default function App() {
@@ -14,7 +14,7 @@ export default function App() {
     }));
   };
 
-  const totalIncome = budget.members.reduce((s, m) => s + m.salary, 0);
+  const totalIncome = budget.members.reduce((s, m) => s + monthlyIncome(m), 0);
   const totalSpend = budget.members.reduce(
     (s, m) => s + totalExpenses(m) + bufferAmount(m),
     0,
@@ -39,17 +39,20 @@ export default function App() {
 
       {showHousehold && (
         <section className="card household">
-          <div className="household-stat">
-            <span>Общий доход</span>
-            <strong>{formatMoney(totalIncome)}</strong>
-          </div>
-          <div className="household-stat">
-            <span>Распределено</span>
-            <strong>{formatMoney(totalSpend)}</strong>
-          </div>
-          <div className="household-stat accent">
-            <span>Свободно</span>
-            <strong>{formatMoney(totalFree)}</strong>
+          <span className="household-title">Бюджет семьи в месяц</span>
+          <div className="household-stats">
+            <div className="household-stat">
+              <span>Общий доход</span>
+              <strong>{formatMoney(totalIncome)}</strong>
+            </div>
+            <div className="household-stat">
+              <span>Распределено</span>
+              <strong>{formatMoney(totalSpend)}</strong>
+            </div>
+            <div className="household-stat accent">
+              <span>Свободно</span>
+              <strong>{formatMoney(totalFree)}</strong>
+            </div>
           </div>
         </section>
       )}

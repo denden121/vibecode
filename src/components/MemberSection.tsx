@@ -5,6 +5,8 @@ import {
   allocatedPercent,
   bufferAmount,
   freeMoney,
+  monthlyBonus,
+  monthlyIncome,
   totalExpenses,
 } from "../budget";
 import { DonutChart, type Segment } from "./DonutChart";
@@ -16,7 +18,7 @@ type Props = {
 
 const EMOJI_CHOICES = [
   "🏠", "✈️", "🛒", "💊", "📱", "🧾", "👗", "💄",
-  "🚗", "🎓", "🎁", "🐶", "💪", "☕", "🎬", "💳",
+  "🚗", "🎓", "🎁", "🐶", "💪", "☕", "🎬", "💈", "💳",
 ];
 
 export function MemberSection({ member, onChange }: Props) {
@@ -24,6 +26,9 @@ export function MemberSection({ member, onChange }: Props) {
   const buffer = bufferAmount(member);
   const free = freeMoney(member);
   const allocPercent = allocatedPercent(member);
+  const income = monthlyIncome(member);
+  const bonusPerMonth = monthlyBonus(member);
+  const hasBonus = bonusPerMonth > 0;
   const overBudget = free < 0;
 
   const updateExpense = (id: string, patch: Partial<Expense>) => {
@@ -66,21 +71,39 @@ export function MemberSection({ member, onChange }: Props) {
           <span className="member-tag">Обязательные траты</span>
           <h2>{member.name}</h2>
         </div>
-        <label className="salary-field">
-          <span>Зарплата в месяц</span>
-          <div className="salary-input">
-            <input
-              type="number"
-              min={0}
-              step={1000}
-              value={member.salary || ""}
-              onChange={(e) =>
-                onChange({ ...member, salary: Number(e.target.value) })
-              }
-            />
-            <span className="suffix">₽</span>
-          </div>
-        </label>
+        <div className="income-fields">
+          <label className="salary-field">
+            <span>Зарплата в месяц</span>
+            <div className="salary-input">
+              <input
+                type="number"
+                min={0}
+                step={1000}
+                value={member.salary || ""}
+                onChange={(e) =>
+                  onChange({ ...member, salary: Number(e.target.value) })
+                }
+              />
+              <span className="suffix">₽</span>
+            </div>
+          </label>
+          <label className="salary-field">
+            <span>Премия в год</span>
+            <div className="salary-input">
+              <input
+                type="number"
+                min={0}
+                step={50000}
+                placeholder="0"
+                value={member.annualBonus || ""}
+                onChange={(e) =>
+                  onChange({ ...member, annualBonus: Number(e.target.value) })
+                }
+              />
+              <span className="suffix">₽</span>
+            </div>
+          </label>
+        </div>
       </header>
 
       <div className="member-grid">
@@ -103,9 +126,18 @@ export function MemberSection({ member, onChange }: Props) {
 
         <div className="stats-col">
           <div className="stat">
-            <span className="stat-label">Доход</span>
-            <span className="stat-value">{formatMoney(member.salary)}</span>
+            <span className="stat-label">
+              Доход в месяц{hasBonus ? " (с премией)" : ""}
+            </span>
+            <span className="stat-value">{formatMoney(income)}</span>
           </div>
+          {hasBonus && (
+            <p className="income-note">
+              {formatNumber(member.salary)} ₽ зарплата +{" "}
+              {formatNumber(bonusPerMonth)} ₽ премия (
+              {formatNumber(member.annualBonus || 0)} ₽/год ÷ 12)
+            </p>
+          )}
           <div className="stat">
             <span className="stat-label">Обязательные траты</span>
             <span className="stat-value">{formatMoney(expensesTotal)}</span>
@@ -172,8 +204,8 @@ export function MemberSection({ member, onChange }: Props) {
               onChange={(ev) => updateExpense(e.id, { name: ev.target.value })}
             />
             <span className="share">
-              {member.salary > 0
-                ? `${Math.round((e.amount / member.salary) * 100)}%`
+              {income > 0
+                ? `${Math.round((e.amount / income) * 100)}%`
                 : "—"}
             </span>
             <div className="amount-input">

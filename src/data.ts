@@ -22,6 +22,21 @@ export const defaultBudget: BudgetData = {
         { id: "cosmetics", name: "Косметика", amount: 2000, icon: "💄" },
       ],
     },
+    {
+      id: "husband",
+      name: "Муж",
+      salary: 440000,
+      annualBonus: 1800000,
+      bufferPercent: 10,
+      expenses: [
+        { id: "rent", name: "Квартира", amount: 45000, icon: "🏠" },
+        { id: "travel", name: "Путешествия", amount: 30000, icon: "✈️" },
+        { id: "sport", name: "Спорт", amount: 10000, icon: "💪" },
+        { id: "medicine", name: "Медицина", amount: 10000, icon: "💊" },
+        { id: "beauty", name: "Красота", amount: 3000, icon: "💈" },
+        { id: "misc", name: "Мелочи", amount: 20000, icon: "🧾" },
+      ],
+    },
   ],
 };
 
